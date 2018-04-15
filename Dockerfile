@@ -7,7 +7,7 @@ RUN apt-get update && \
   apt-get clean && \
   rm -rf /var/cache/apt/archives/* /var/lib/apt/lists/*
 
-RUN docker-php-ext-install pdo pdo_pgsql pgsql mbstring intl
+RUN docker-php-ext-install pdo pdo_pgsql pdo_mysql pgsql mbstring intl
 
 COPY config/php.ini /usr/local/etc/php/
 
