@@ -3,7 +3,7 @@ MAINTAINER genzouw <genzouw@gmail.com>
 
 RUN apt-get update && \
   apt-get upgrade -y && \
-  apt-get -y install git unzip zlib1g-dev libpq-dev libicu-dev && \
+  apt-get -y install git unzip zlib1g-dev libpq-dev libicu-dev procps && \
   apt-get clean && \
   rm -rf /var/cache/apt/archives/* /var/lib/apt/lists/*
 
