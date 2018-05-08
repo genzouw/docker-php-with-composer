@@ -3,13 +3,29 @@ MAINTAINER genzouw <genzouw@gmail.com>
 
 RUN apt-get update && \
   apt-get upgrade -y && \
-  apt-get -y install git unzip zlib1g-dev libpq-dev libicu-dev procps && \
+  apt-get -y install git unzip zlib1g-dev libpq-dev libicu-dev procps libxslt-dev unixodbc-dev locales unixodbc-dev && \
   apt-get clean && \
   rm -rf /var/cache/apt/archives/* /var/lib/apt/lists/*
 
-RUN docker-php-ext-install pdo pdo_pgsql pdo_mysql pgsql mbstring intl
+
+RUN docker-php-source extract \
+    && cd /usr/src/php/ext/odbc \
+    && phpize \
+    && sed -ri 's@^ *test +"\$PHP_.*" *= *"no" *&& *PHP_.*=yes *$@#&@g' configure \
+    && ./configure --with-unixODBC=shared,/usr \
+    && cd /root \
+    && docker-php-ext-configure pdo_odbc --with-pdo-odbc=unixODBC,/usr \
+    && docker-php-ext-install pdo pdo_pgsql pdo_mysql pgsql mbstring intl xsl pdo_odbc odbc \
+    && docker-php-source delete \
+  ;
+
 
 COPY config/php.ini /usr/local/etc/php/
+
+RUN locale-gen ja_JP.UTF-8 && \
+  localedef -f UTF-8 -i ja_JP ja_JP.utf8
+
+RUN echo 'export LANG=ja_JP.UTF-8' >> /etc/bash.bashrc
 
 RUN BIN_DIR="/usr/local/bin"; \
   [ ! -d "$BIN_DIR" ] && mkdir -p "$BIN_DIR"; cd $BIN_DIR \
