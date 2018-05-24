@@ -1,4 +1,4 @@
-FROM php:7.2.4-cli
+FROM php:7.1.17-cli
 MAINTAINER genzouw <genzouw@gmail.com>
 
 RUN apt-get update && \
