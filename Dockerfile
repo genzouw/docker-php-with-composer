@@ -1,11 +1,22 @@
 FROM php:7.1.17-cli
-MAINTAINER genzouw <genzouw@gmail.com>
 
-RUN apt-get update && \
-  apt-get upgrade -y && \
-  apt-get -y install git unzip zlib1g-dev libpq-dev libicu-dev procps libxslt-dev unixodbc-dev locales && \
-  apt-get clean && \
-  rm -rf /var/cache/apt/archives/* /var/lib/apt/lists/*
+LABEL maintainer "genzouw <genzouw@gmail.com>"
+
+RUN apt-get update \
+  && apt-get upgrade -y \
+  && apt-get -y install \
+    --no-install-recommends \
+    git \
+    unzip \
+    zlib1g-dev \
+    libpq-dev \
+    libicu-dev \
+    procps \
+    libxslt-dev \
+    unixodbc-dev \
+    locales \
+  && apt-get clean \
+  && rm -rf /var/cache/apt/archives/* /var/lib/apt/lists/*
 
 
 RUN docker-php-source extract \
